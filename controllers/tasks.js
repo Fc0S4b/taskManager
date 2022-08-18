@@ -46,6 +46,7 @@ const updateTask = async (req, res) => {
   try {
     const { id: taskID } = req.params;
     // bug con runValidators, no funciona ya que acepta request sin nombres
+    // posible solución https://www.npmjs.com/package/mongoose-unique-validator
     const task = await Task.findOneAndUpdate({ _id: taskID }, req.body, {
       new: true,
       runValidators: true,
