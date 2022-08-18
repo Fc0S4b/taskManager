@@ -42,11 +42,29 @@ const deleteTask = async (req, res) => {
     res.status(500).json({ msg: error });
   }
 };
+// put es para reemplazar un recurso existente y path para una actualización parcial
 const updateTask = async (req, res) => {
   try {
     const { id: taskID } = req.params;
     // bug con runValidators, no funciona ya que acepta request sin nombres
     // posible solución https://www.npmjs.com/package/mongoose-unique-validator
+    const task = await Task.findOneAndUpdate({ _id: taskID }, req.body, {
+      new: true,
+      runValidators: true,
+      overwrite: true, //si quiero que se reescriba completamente todos los valores del put (completed y name), put hace esto
+    });
+    if (!task) {
+      return res.status(404).json({ msg: `No task with id: ${taskID}` });
+    }
+
+    res.status(200).json({ task });
+  } catch (error) {
+    res.status(500).json({ msg: error });
+  }
+};
+const editTask = async (req, res) => {
+  try {
+    const { id: taskID } = req.params;
     const task = await Task.findOneAndUpdate({ _id: taskID }, req.body, {
       new: true,
       runValidators: true,
@@ -67,4 +85,5 @@ module.exports = {
   getTask,
   updateTask,
   deleteTask,
+  editTask,
 };
