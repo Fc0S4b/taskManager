@@ -1,8 +1,16 @@
 const mongoose = require('mongoose');
-// este es el único esquema válido, cualquier otra propiedad será ignorada (si pones en el body al hacer post en createTask en postman, otra propiedad que no sea name y completed, será ignorada)
+// el objeto que tiene name es un validador, ya que si no lo tiene, entonces si se hacen solicitudes post vacías, se guardarán en la db y no son necesarias, es necesario un par de requisitos para que se guarde en el name ( y también un validador para completed). Mas info de validadores en los docs del paquete de mongoose
 const TaskSchema = new mongoose.Schema({
-  name: String,
-  completed: Boolean
-})
+  name: {
+    type: String,
+    require: [true, 'must provide name'],
+    trim: true, //para eliminar espacios en blanco en extremos
+    maxlength: [20, 'name can not be more than 20 characters'],
+  },
+  completed: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-module.exports = mongoose.model('Task', TaskSchema)
+module.exports = mongoose.model('Task', TaskSchema);
