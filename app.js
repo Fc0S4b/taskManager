@@ -6,10 +6,12 @@ require('dotenv').config();
 // middleware
 app.use(express.static('./public'));
 app.use(express.json());
-
+const notFound = require('./middleware/not-found');
 // routes
 
 app.use('/api/v1/tasks', tasks);
+
+app.use(notFound);
 
 const port = 3000;
 
