@@ -15,8 +15,8 @@ app.use('/api/v1/tasks', tasks);
 app.use(notFound);
 app.use(errorHandlerMiddleware);
 
-const port = 3000;
-
+const port = process.env.PORT || 3000;
+// prueba en consola PORT=6000 node app.js y verás que se cambia a port 6000, esto es para manejar errores en el deployment y tenga conflicto con puerto único
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URI);
